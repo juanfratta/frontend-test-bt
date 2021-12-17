@@ -36,3 +36,14 @@ export const addUser = createAsyncThunk('users/addUser', async (user: User, thun
   if (success && data) return data;
   if (error) return thunkAPI.rejectWithValue(error?.message);
 });
+
+//Elimina un usuario
+export const removeUser = createAsyncThunk(
+  'users/delete',
+  async (id: number, thunkAPI) => {
+    const { success, data, error } = await users_svc.deleteUser(id);
+
+    if (success && data) return data;
+    if (error) return thunkAPI.rejectWithValue(error?.message);
+  }
+);

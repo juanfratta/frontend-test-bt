@@ -37,15 +37,31 @@ const users_svc = {
     try {
       const { data } = await axios.post(`${URL}/api/users`, user);
 
-      console.log('data in post user', data);
-
       return { success: true, data };
     } catch (e) {
-      console.log('error in postUser', e);
       const error =
         e instanceof Error
           ? e
           : new Error('Ocurrió un error al intentar agregar el usuario');
+      return { success: false, error };
+    }
+  },
+  async deleteUser(id: number): Promise<ServiceResponse<any>> {
+    try {
+      const resp = await axios.delete(`${URL}/api/users/${id}`);
+
+      let userDeleted;
+
+      if (resp.status === 200) {
+        userDeleted = id;
+      }
+
+      return { success: true, data: userDeleted };
+    } catch (e) {
+      const error =
+        e instanceof Error
+          ? e
+          : new Error('Ocurrió un error al intentar borrar el usuario');
       return { success: false, error };
     }
   },

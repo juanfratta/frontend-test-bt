@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { LoadingState } from '../../typings/state.types';
 import { User } from '../../typings/user.types';
-import { getUserByName, getUsers } from './actions.users';
+import { getUserByName, getUsers, removeUser } from './actions.users';
 
 interface UsersState {
   loading: LoadingState;
@@ -42,5 +42,17 @@ export const usersReducer = createReducer(initialState, (builder) => {
   builder.addCase(getUsers.rejected, (state) => {
     state.loading = LoadingState.FAILURE;
     state.users = [];
+  });
+
+  builder.addCase(removeUser.pending, (state) => {
+    state.loading = LoadingState.PENDING;
+  });
+
+  builder.addCase(removeUser.fulfilled, (state, action) => {
+    state.loading = LoadingState.COMPLETED;
+  });
+
+  builder.addCase(removeUser.rejected, (state) => {
+    state.loading = LoadingState.FAILURE;
   });
 });

@@ -1,13 +1,15 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { getUserByName, getUsers } from '../../../state/users/actions.users';
+import { getUserByName, getUsers, removeUser } from '../../../state/users/actions.users';
 import { selectUsers } from '../../../state/users/selectors.users';
 import { LoadingState } from '../../../typings/state.types';
+import { User } from '../../../typings/user.types';
 import AddUserForm from '../AddUserForm';
 
 const UsersList: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { loading, users } = useAppSelector(selectUsers);
+
   const [page, setPage] = useState<number>(1);
   const [value, setValue] = useState<string>('');
 
@@ -33,15 +35,22 @@ const UsersList: FunctionComponent = () => {
     setValue('');
   };
 
+  const handlerDelete = (id: number) => {
+    dispatch(removeUser(id));
+    dispatch(getUsers({ page, limit }));
+  };
+
   return (
     <div>
       <AddUserForm />
       <button id='next' onClick={(e) => handlerPaginate(e)}>
         NexPage
       </button>
-      <button id='prev' onClick={(e) => handlerPaginate(e)}>
-        PrevPage
-      </button>
+      {page > 1 && (
+        <button id='prev' onClick={(e) => handlerPaginate(e)}>
+          PrevPage
+        </button>
+      )}
       <input type='text' value={value} onChange={(e) => setValue(e.target.value)} />
       <button onClick={() => hanlderSearch()}>buscar usuario</button>
 
@@ -50,8 +59,15 @@ const UsersList: FunctionComponent = () => {
          como prop a un componente message*/}
       {noUsers && page === 1 && <p>No hay usuarios para mostrar ...</p>}
       {noUsers && page > 1 && <p>No hay más usuarios ...</p>}
-      {showUsersList && users.map((user) => <p key={user.id}>{JSON.stringify(user)}</p>)}
-      {loading === LoadingState.FAILURE && <p>Error ...</p>}
+
+      {showUsersList &&
+        users.map((user) => (
+          <div key={user.id}>
+            <p>{JSON.stringify(user)}</p>
+            <button onClick={() => handlerDelete(user.id!)}>Delete</button>
+          </div>
+        ))}
+      {loading === LoadingState.FAILURE && <p>Error</p>}
     </div>
   );
 };
