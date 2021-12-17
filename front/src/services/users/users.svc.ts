@@ -32,6 +32,23 @@ const users_svc = {
       return { success: false, error };
     }
   },
+
+  async postUser(user: User): Promise<ServiceResponse<any>> {
+    try {
+      const { data } = await axios.post(`${URL}/api/users`, user);
+
+      console.log('data in post user', data);
+
+      return { success: true, data };
+    } catch (e) {
+      console.log('error in postUser', e);
+      const error =
+        e instanceof Error
+          ? e
+          : new Error('Ocurrió un error al intentar agregar el usuario');
+      return { success: false, error };
+    }
+  },
 };
 
 export default users_svc;

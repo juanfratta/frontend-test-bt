@@ -1,6 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import users_svc from '../../services/users/users.svc';
+import { User } from '../../typings/user.types';
 
+/* Podría ser una misma función, y también el fetch. Pero se optó por trabajarlas por separado
+por tener responsabilidades diferentes y por escalabilidad.
+*/
+
+//Devuelve todos los usuarios desde la api
 export const getUsers = createAsyncThunk(
   'users/getUsers',
   async (params: any, thunkAPI) => {
@@ -12,6 +18,7 @@ export const getUsers = createAsyncThunk(
   }
 );
 
+//Devuelve un usuario específico a través del name
 export const getUserByName = createAsyncThunk(
   'users/getByName',
   async (name: string, thunkAPI) => {
@@ -22,6 +29,10 @@ export const getUserByName = createAsyncThunk(
   }
 );
 
-/* Podría ser una misma función, y también el fetch. Pero se optó por trabajarlas por separado
-por tener responsabilidades diferentes y por escalabilidad.
-*/
+//Agrega un usuario
+export const addUser = createAsyncThunk('users/addUser', async (user: User, thunkAPI) => {
+  const { success, data, error } = await users_svc.postUser(user);
+
+  if (success && data) return data;
+  if (error) return thunkAPI.rejectWithValue(error?.message);
+});

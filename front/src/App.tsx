@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
-import { UsersList } from './components/views/UsersList/UsersList';
 import { store } from './state/store';
+
+import UsersList from './components/views/UsersList/UsersList';
 
 const App: React.FunctionComponent = () => {
   return (
