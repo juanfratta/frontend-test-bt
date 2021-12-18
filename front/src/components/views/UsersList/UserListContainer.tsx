@@ -9,6 +9,7 @@ import Paginator from '../../Paginator';
 import SearchUser from '../../SearchUser';
 import AddUserForm from '../AddUserForm';
 import { UsersList } from './UsersList';
+import { ListWrapper } from './UsersList.styled';
 
 const UsersListContainer: FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -33,9 +34,9 @@ const UsersListContainer: FunctionComponent = () => {
   };
 
   return (
-    <div>
-      <AddUserForm />
-      <SearchUser />
+    <ListWrapper>
+      {/* <AddUserForm />
+      <SearchUser /> */}
 
       {loading === LoadingState.PENDING && <p>Loading ... </p>}
       {!haveUsers && page === 1 && <p>No hay usuarios para mostrar ...</p>}
@@ -45,7 +46,7 @@ const UsersListContainer: FunctionComponent = () => {
       {showUsersList && <UsersList limit={limit} page={page} users={users} />}
 
       <Paginator haveUsers={haveUsers} page={page} handlerPaginate={handlerPaginate} />
-    </div>
+    </ListWrapper>
   );
 };
 
