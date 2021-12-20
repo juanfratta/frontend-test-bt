@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 import { getUserByName } from '../../state/users/actions.users';
 
 interface SearchUserProps {}
@@ -13,11 +13,10 @@ const SearchUser: FunctionComponent<SearchUserProps> = () => {
     setValue('');
   };
   return (
-    <>
-      {' '}
-      <input type='text' value={value} onChange={(e) => setValue(e.target.value)} />
+    <div>
+      <input type="text" value={value} onChange={(e) => setValue(e.target.value)} />
       <button onClick={() => hanlderSearch()}>buscar usuario</button>
-    </>
+    </div>
   );
 };
 

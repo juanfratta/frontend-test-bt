@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { getUsers } from '../../../state/users/actions.users';
 import { selectUsers } from '../../../state/users/selectors.users';
 import { LoadingState } from '../../../typings/state.types';
+import Header from '../../Header';
 
 import Paginator from '../../Paginator';
 import SearchUser from '../../SearchUser';
@@ -16,7 +17,7 @@ const UsersListContainer: FunctionComponent = () => {
   const { loading, users } = useAppSelector(selectUsers);
   const [page, setPage] = useState<number>(1);
 
-  const limit = 2;
+  const limit = 5;
   const showUsersList = LoadingState.COMPLETED && users.length !== 0;
   const haveUsers = LoadingState.COMPLETED && users.length ? true : false;
 
@@ -35,8 +36,7 @@ const UsersListContainer: FunctionComponent = () => {
 
   return (
     <ListWrapper>
-      {/* <AddUserForm />
-      <SearchUser /> */}
+      <Header />
 
       {loading === LoadingState.PENDING && <p>Loading ... </p>}
       {!haveUsers && page === 1 && <p>No hay usuarios para mostrar ...</p>}

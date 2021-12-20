@@ -1,9 +1,9 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, SyntheticEvent } from 'react';
 
 interface PaginatorProps {
   haveUsers: boolean;
   page: number;
-  handlerPaginate: (e: any) => void;
+  handlerPaginate: (e: SyntheticEvent) => void;
 }
 
 const Paginator: FunctionComponent<PaginatorProps> = ({
@@ -14,12 +14,12 @@ const Paginator: FunctionComponent<PaginatorProps> = ({
   return (
     <>
       {!haveUsers && (
-        <button id='next' onClick={(e) => handlerPaginate(e)}>
+        <button id="next" onClick={(e) => handlerPaginate(e)}>
           NexPage
         </button>
       )}
       {page > 1 && (
-        <button id='prev' onClick={(e) => handlerPaginate(e)}>
+        <button id="prev" onClick={(e) => handlerPaginate(e)}>
           PrevPage
         </button>
       )}

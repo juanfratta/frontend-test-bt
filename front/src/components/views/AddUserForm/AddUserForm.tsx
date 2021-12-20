@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { addUser } from '../../../state/users/actions.users';
 import { addUserSchema } from './AddUseForm.schema';
 import { useAppDispatch } from '../../../hooks/hooks';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import Modal from 'react-modal';
+import { AddUserModal, customStyles } from './AddUserForm.styled.';
 
 type Inputs = {
   name: string;
@@ -13,6 +16,8 @@ type Inputs = {
 };
 
 const AddUserForm: React.FunctionComponent = () => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -29,21 +34,28 @@ const AddUserForm: React.FunctionComponent = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor='photo'>Imagen:</label>
-      <input {...register('photo')} type='text' />
-      <p>{errors.photo?.message}</p>
+    <>
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
 
-      <label htmlFor='name'>Nombre</label>
-      <input {...register('name')} type='text' />
-      <span>{errors.name?.message}</span>
+      <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="photo">Imagen:</label>
+          <input {...register('photo')} type="text" />
+          <p>{errors.photo?.message}</p>
 
-      <label htmlFor='description'>Descripción:</label>
-      <input {...register('description')} type='text' />
-      <span>{errors.description?.message}</span>
+          <label htmlFor="name">Nombre</label>
+          <input {...register('name')} type="text" />
+          <span>{errors.name?.message}</span>
 
-      <input type='submit' />
-    </form>
+          <label htmlFor="description">Descripción:</label>
+          <input {...register('description')} type="text" />
+          <span>{errors.description?.message}</span>
+
+          <input type="submit" onClick={() => setIsOpen(false)} />
+          <button onClick={() => setIsOpen(false)}>Cerrar modal</button>
+        </form>
+      </Modal>
+    </>
   );
 };
 export default AddUserForm;

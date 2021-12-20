@@ -3,6 +3,9 @@ import { FunctionComponent } from 'react';
 import { useAppDispatch } from '../../../hooks/hooks';
 import { getUsers, removeUser } from '../../../state/users/actions.users';
 import { User } from '../../../typings/user.types';
+import SearchUser from '../../SearchUser';
+import UserItem from '../../UserItem';
+import { List, HeaderList } from './UsersList.styled';
 
 interface UsersList {
   limit: number;
@@ -18,13 +21,14 @@ export const UsersList: FunctionComponent<UsersList> = ({ users, page, limit }) 
   };
 
   return (
-    <div>
+    <List>
+      <HeaderList>
+        <h4>Nombre</h4>
+        <h4>Descripción</h4>
+      </HeaderList>
       {users.map((user) => (
-        <div key={user.id}>
-          <p>{JSON.stringify(user)}</p>
-          <button onClick={() => handlerDelete(user.id!)}>Delete</button>
-        </div>
+        <UserItem key={user.id} user={user} handlerDelete={handlerDelete} />
       ))}
-    </div>
+    </List>
   );
 };
