@@ -1,19 +1,19 @@
 import { FunctionComponent, SyntheticEvent } from 'react';
 
 interface PaginatorProps {
-  haveUsers: boolean;
   page: number;
+  lastPage: number;
   handlerPaginate: (e: SyntheticEvent) => void;
 }
 
 const Paginator: FunctionComponent<PaginatorProps> = ({
   page,
   handlerPaginate,
-  haveUsers,
+  lastPage,
 }) => {
   return (
     <>
-      {!haveUsers && (
+      {page < lastPage && (
         <button id="next" onClick={(e) => handlerPaginate(e)}>
           NexPage
         </button>

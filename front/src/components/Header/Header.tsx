@@ -1,14 +1,18 @@
 import { FunctionComponent } from 'react';
 import SearchUser from '../SearchUser';
 import AddUserForm from '../views/AddUserForm';
+import { HeaderContainer } from './Header.styled';
 
-interface HeaderProps {}
+interface HeaderProps {
+  page: number;
+  limit: number;
+}
 
-const Header: FunctionComponent<HeaderProps> = () => {
+const Header: FunctionComponent<HeaderProps> = ({ ...props }) => {
   return (
-    <div>
-      <SearchUser /> <AddUserForm />
-    </div>
+    <HeaderContainer>
+      <SearchUser /> <AddUserForm {...props} />
+    </HeaderContainer>
   );
 };
 

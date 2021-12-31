@@ -5,7 +5,8 @@ import { User } from '../../typings/user.types';
 const URL = 'http://localhost:4000';
 
 const users_svc = {
-  async fetchUsers(page: number, limit: number): Promise<ServiceResponse<User[]>> {
+  //action para para traer los usuarios y si le paso los parámetros, usuario por página
+  async fetchUsers(page?: number, limit?: number): Promise<ServiceResponse<User[]>> {
     try {
       const params = { _page: page, _limit: limit };
 
@@ -21,6 +22,7 @@ const users_svc = {
     }
   },
 
+  //action para traer un usuario específico
   async fetchUser(name: string): Promise<ServiceResponse<User>> {
     try {
       const params = { q: name };
@@ -33,6 +35,7 @@ const users_svc = {
     }
   },
 
+  //action para crear un nuevo usuario
   async postUser(user: User): Promise<ServiceResponse<any>> {
     try {
       const { data } = await axios.post(`${URL}/api/users`, user);
@@ -46,6 +49,8 @@ const users_svc = {
       return { success: false, error };
     }
   },
+
+  //action para eliminar un usuario
   async deleteUser(id: number): Promise<ServiceResponse<any>> {
     try {
       const resp = await axios.delete(`${URL}/api/users/${id}`);

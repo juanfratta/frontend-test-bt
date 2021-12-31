@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
-import { addUser } from '../../../state/users/actions.users';
+import { addUser, getAllUsers, getUsers } from '../../../state/users/actions.users';
 import { addUserSchema } from './AddUseForm.schema';
 import { useAppDispatch } from '../../../hooks/hooks';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Modal from 'react-modal';
-import { AddUserModal, customStyles } from './AddUserForm.styled.';
+import { ModalContent, StyleModal } from './AddUserForm.styled.';
 
 type Inputs = {
   name: string;
@@ -15,9 +14,12 @@ type Inputs = {
   photo: string;
 };
 
-const AddUserForm: React.FunctionComponent = () => {
-  const [modalIsOpen, setIsOpen] = useState(false);
+interface PropsForm {
+  page: number;
+  limit: number;
+}
 
+const AddUserForm: React.FunctionComponent<PropsForm> = ({ page, limit }) => {
   const {
     register,
     handleSubmit,
@@ -25,20 +27,27 @@ const AddUserForm: React.FunctionComponent = () => {
   } = useForm<Inputs>({
     resolver: yupResolver(addUserSchema),
   });
+
+  const [isOpen, setIsOpen] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (!data) return;
-
     dispatch(addUser(data));
+    dispatch(getAllUsers());
+    dispatch(getUsers({ page, limit }));
+    setIsOpen(false);
   };
 
   return (
-    <>
-      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+    <div>
+      <button onClick={() => setIsOpen(true)}>Agregar Usuario</button>
 
-      <Modal isOpen={modalIsOpen} style={customStyles} contentLabel="Modal">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <StyleModal isOpen={isOpen}>
+        <form id="form" onSubmit={handleSubmit(onSubmit)}>
+          <button onClick={() => setIsOpen(false)}>cerrar</button>
+
           <label htmlFor="photo">Imagen:</label>
           <input {...register('photo')} type="text" />
           <p>{errors.photo?.message}</p>
@@ -51,11 +60,10 @@ const AddUserForm: React.FunctionComponent = () => {
           <input {...register('description')} type="text" />
           <span>{errors.description?.message}</span>
 
-          <input type="submit" onClick={() => setIsOpen(false)} />
-          <button onClick={() => setIsOpen(false)}>Cerrar modal</button>
+          <button type="submit">Agregar</button>
         </form>
-      </Modal>
-    </>
+      </StyleModal>
+    </div>
   );
 };
 export default AddUserForm;

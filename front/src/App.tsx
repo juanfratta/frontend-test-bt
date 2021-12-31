@@ -5,13 +5,16 @@ import UsersList from './components/views/UsersList';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
+import { ModalProvider } from 'styled-react-modal';
 
 const App: React.FunctionComponent = () => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <UsersList />
+        <ModalProvider>
+          <GlobalStyles />
+          <UsersList />
+        </ModalProvider>
       </ThemeProvider>
     </Provider>
   );

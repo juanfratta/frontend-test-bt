@@ -13,7 +13,7 @@ export const ListWrapper = styled.div`
 export const List = styled.ul`
   width: 100%;
   max-width: 1024px;
-  height: 80%;
+  height: 70%;
   background: white;
   color: ${({ theme }) => theme.colors.grey_bt};
   font-size: 14px;

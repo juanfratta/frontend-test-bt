@@ -22,7 +22,8 @@ export const NameContainer = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 10px 20px;
+  border-right: 0.5px solid ${({ theme }) => theme.colors.lightgrey_bt};
 
   img {
     width: 60px;
