@@ -27,7 +27,6 @@ const UsersList: FunctionComponent<UsersList> = ({
   //Idealmente, esta data debería venir desde el back, para evitar esta llamada.
 
   useEffect(() => {
-    console.log('entro en userslist');
     dispatch(getAllUsers());
   }, [dispatch, getAllUsers]);
 
