@@ -15,7 +15,7 @@ const UserItem: FunctionComponent<UserItemProps> = ({ user, handlerDelete }) => 
         <div>
           <h4>{user.name}</h4>
           <p id="delete" onClick={() => handlerDelete(user.id!)}>
-            Delete
+            Eliminar
           </p>
         </div>
       </NameContainer>

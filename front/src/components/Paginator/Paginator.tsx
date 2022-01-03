@@ -1,16 +1,17 @@
 import { FunctionComponent, SyntheticEvent } from 'react';
+import { useAppSelector } from '../../hooks/hooks';
+import { selectUsers } from '../../state/users/selectors.users';
 
 interface PaginatorProps {
   page: number;
-  lastPage: number;
   handlerPaginate: (e: SyntheticEvent) => void;
+  limit: number;
 }
 
-const Paginator: FunctionComponent<PaginatorProps> = ({
-  page,
-  handlerPaginate,
-  lastPage,
-}) => {
+const Paginator: FunctionComponent<PaginatorProps> = ({ page, handlerPaginate }) => {
+  const { totalUsers } = useAppSelector(selectUsers);
+  let lastPage = Math.ceil(totalUsers.length / 5);
+
   return (
     <>
       {page < lastPage && (

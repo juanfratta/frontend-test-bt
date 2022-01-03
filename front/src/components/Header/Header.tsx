@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, memo } from 'react';
 import SearchUser from '../SearchUser';
 import AddUserForm from '../views/AddUserForm';
 import { HeaderContainer } from './Header.styled';
@@ -16,4 +16,4 @@ const Header: FunctionComponent<HeaderProps> = ({ ...props }) => {
   );
 };
 
-export default Header;
+export default memo(Header);

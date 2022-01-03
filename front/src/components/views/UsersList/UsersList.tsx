@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, memo, useEffect } from 'react';
 
 import { useAppDispatch } from '../../../hooks/hooks';
 import { getAllUsers, getUsers, removeUser } from '../../../state/users/actions.users';
@@ -12,22 +12,31 @@ interface UsersList {
   limit: number;
   page: number;
   users: User[];
-  setPage: any;
+  setCurrentPage: any;
 }
-export const UsersList: FunctionComponent<UsersList> = ({
+
+const UsersList: FunctionComponent<UsersList> = ({
   users,
   page,
   limit,
-  setPage,
+  setCurrentPage,
 }) => {
   const dispatch = useAppDispatch();
 
-  const handlerDelete = async (id: number) => {
-    await dispatch(removeUser(id));
-    await dispatch(getUsers({ page, limit }));
+  //Al actualizar la lista de usuarios, traemos también todos los usuarios para calcular la cantidad total de páginas.
+  //Idealmente, esta data debería venir desde el back, para evitar esta llamada.
+
+  useEffect(() => {
+    console.log('entro en userslist');
+    dispatch(getAllUsers());
+  }, [dispatch, getAllUsers]);
+
+  const handlerDelete = (id: number) => {
+    dispatch(removeUser(id));
+    dispatch(getUsers({ page, limit }));
 
     if (users.length === 1) {
-      setPage(page - 1);
+      setCurrentPage(page - 1);
     }
   };
 
@@ -43,3 +52,5 @@ export const UsersList: FunctionComponent<UsersList> = ({
     </List>
   );
 };
+
+export default memo(UsersList);

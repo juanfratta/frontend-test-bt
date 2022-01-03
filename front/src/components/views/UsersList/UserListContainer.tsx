@@ -7,56 +7,56 @@ import { LoadingState } from '../../../typings/state.types';
 
 import Header from '../../Header';
 import Paginator from '../../Paginator';
-import { UsersList } from './UsersList';
+import UsersList from './UsersList';
 import { ListWrapper } from './UsersList.styled';
 
 const UsersListContainer: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { loading, users, totalUsers } = useAppSelector(selectUsers);
-  const [page, setPage] = useState<number>(1);
+  const { loading, users } = useAppSelector(selectUsers);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const limit = 5;
-  const showUsersList = LoadingState.COMPLETED && users.length;
-  const lastPage = Math.ceil(totalUsers?.length / limit);
+  const showUsersList = LoadingState.COMPLETED && users.length !== 0;
 
-  //Al cargar la app traemos todos los usuarios para calcular la cantidad total de páginas.
-  //Idealmente, esta data debería venir desde el back, para evitar esa llamada.
-
+  //Cada vez que actualizamos la página, traemos los usuarios correspondientes.
   useEffect(() => {
-    dispatch(getAllUsers());
-  }, []);
+    dispatch(getUsers({ page: currentPage, limit }));
+  }, [dispatch, currentPage]);
 
-  //Cada vez que actualizamos la página, traemos los usuarios corresondientes.
-  useEffect(() => {
-    dispatch(getUsers({ page, limit }));
-  }, [dispatch, page]);
-
-  const handlerPaginate = (e: any) => {
+  const handlerPaginate = async (e: any) => {
     if (e.target.id === 'next') {
-      setPage(page + 1);
+      setCurrentPage(currentPage + 1);
     }
     if (e.target.id === 'prev') {
-      setPage(page - 1);
+      setCurrentPage(currentPage - 1);
     }
   };
 
-  //Si ya no tengo usuarios,< retrocedo una página.
-
   return (
     <ListWrapper>
-      <Header page={page} limit={limit} />
+      <Header page={currentPage} limit={limit} />
 
       {loading === LoadingState.PENDING && <p>Loading ... </p>}
 
-      {!users.length && page === 1 && <p>No hay usuarios para mostrar ...</p>}
+      {!users.length && currentPage === 1 && <p>No hay usuarios para mostrar ...</p>}
 
-      {loading === LoadingState.FAILURE && <p>Error</p>}
+      {loading === LoadingState.FAILURE && <p>Ocurrió un error... </p>}
 
       {showUsersList && (
-        <UsersList limit={limit} page={page} users={users} setPage={setPage} />
+        <UsersList
+          limit={limit}
+          page={currentPage}
+          users={users}
+          setCurrentPage={setCurrentPage}
+        />
       )}
 
-      <Paginator page={page} lastPage={lastPage} handlerPaginate={handlerPaginate} />
+      <Paginator
+        page={currentPage}
+        handlerPaginate={handlerPaginate}
+        limit={limit}
+        //lastPage={lastPage}
+      />
     </ListWrapper>
   );
 };

@@ -1,12 +1,32 @@
 import React, { useState } from 'react';
 
-import { addUser, getAllUsers, getUsers } from '../../../state/users/actions.users';
+import { addUser, getUsers } from '../../../state/users/actions.users';
 import { addUserSchema } from './AddUseForm.schema';
 import { useAppDispatch } from '../../../hooks/hooks';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { ModalContent, StyleModal } from './AddUserForm.styled.';
+import {
+  AddUserButton,
+  StyleModal,
+  ButtonContainer,
+  TitleContainer,
+  Form,
+  SendButtonContainer,
+  Error,
+} from './AddUserForm.styled.';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import Button from '../../common/Button';
+
+const Asterisk = () => {
+  return (
+    <span id="*" style={{ color: 'red' }}>
+      <b>*</b>
+    </span>
+  );
+};
 
 type Inputs = {
   name: string;
@@ -35,35 +55,47 @@ const AddUserForm: React.FunctionComponent<PropsForm> = ({ page, limit }) => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (!data) return;
     dispatch(addUser(data));
-    dispatch(getAllUsers());
     dispatch(getUsers({ page, limit }));
     setIsOpen(false);
   };
 
   return (
-    <div>
-      <button onClick={() => setIsOpen(true)}>Agregar Usuario</button>
+    <ButtonContainer>
+      <AddUserButton onClick={() => setIsOpen(true)}>
+        <FontAwesomeIcon icon={faPlusCircle} />
+        {''} Agregar Usuario
+      </AddUserButton>
 
       <StyleModal isOpen={isOpen}>
-        <form id="form" onSubmit={handleSubmit(onSubmit)}>
-          <button onClick={() => setIsOpen(false)}>cerrar</button>
+        <TitleContainer>
+          <h3>Agregar nuevo contacto</h3>
+        </TitleContainer>
 
-          <label htmlFor="photo">Imagen:</label>
+        <Form id="form" onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="photo">
+            URL imagen de perfil <Asterisk />:
+          </label>
           <input {...register('photo')} type="text" />
-          <p>{errors.photo?.message}</p>
+          <Error>{errors.photo?.message}</Error>
 
-          <label htmlFor="name">Nombre</label>
+          <label htmlFor="name">
+            Nombre <Asterisk />:
+          </label>
           <input {...register('name')} type="text" />
-          <span>{errors.name?.message}</span>
+          <Error>{errors.name?.message}</Error>
 
-          <label htmlFor="description">Descripción:</label>
-          <input {...register('description')} type="text" />
-          <span>{errors.description?.message}</span>
+          <label htmlFor="description">
+            Descripción <Asterisk />:
+          </label>
+          <input id="description" {...register('description')} type="textarea" />
+          <Error>{errors.description?.message}</Error>
 
-          <button type="submit">Agregar</button>
-        </form>
+          <SendButtonContainer>
+            <Button type="submit">Guardar</Button>
+          </SendButtonContainer>
+        </Form>
       </StyleModal>
-    </div>
+    </ButtonContainer>
   );
 };
 export default AddUserForm;
